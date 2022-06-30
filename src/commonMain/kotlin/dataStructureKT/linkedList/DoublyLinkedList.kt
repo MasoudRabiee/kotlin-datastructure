@@ -1,6 +1,6 @@
 package dataStructureKT.linkedList
 
-class DoublyLinkedList<T> : ILinkedList<T> {
+class DoublyLinkedList<T> : ILinkedList<T>, Iterable<T> {
 
     data class Node<T>(var element: T, var prev: Node<T>?, var next: Node<T>?)
 
@@ -27,6 +27,18 @@ class DoublyLinkedList<T> : ILinkedList<T> {
             throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
         }
         return trailer.prev!!.element!!
+    }
+
+    fun get(index: Int): T {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        if (!checkIndex(index)) throw IndexOutOfBoundsException("Index $index out of bounds for length $size")
+        return moveTo(index).element!!
+    }
+
+    fun set(value: T, index: Int) {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        if (!checkIndex(index)) throw IndexOutOfBoundsException("Index $index out of bounds for length $size")
+        moveTo(index).element = value
     }
 
     override fun addFirst(element: T) = addBetween(element, header, header.next)
@@ -77,5 +89,35 @@ class DoublyLinkedList<T> : ILinkedList<T> {
         predecessor?.next = successor
         successor?.prev = predecessor
         size--
+    }
+
+    private fun checkIndex(index: Int): Boolean {
+        return !(index < 0 || index > size - 1)
+    }
+
+    private fun moveTo(index: Int): Node<T?> {
+        var result = header.next!!
+        for (i in 1..index) {
+            result = result.next!!
+        }
+        return result
+    }
+
+    override fun iterator() = object : Iterator<T> {
+        var initNode = header.next as? Node<T>?
+        override fun hasNext(): Boolean = initNode != trailer
+        override fun next(): T {
+            val currentNode = initNode!!
+            initNode = initNode!!.next
+            return currentNode.element
+        }
+    }
+}
+
+fun <T> doublyLinkedListOf(vararg elements: T): DoublyLinkedList<T> {
+    return DoublyLinkedList<T>().apply {
+        elements.forEach {
+            addLast(it)
+        }
     }
 }
