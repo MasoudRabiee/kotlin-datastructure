@@ -112,7 +112,7 @@ class SinglyLinkedList<T> : ILinkedList<T>, Iterable<T> {
 
 }
 
-fun <T> singleLinkListOf(vararg elements: T): SinglyLinkedList<T> {
+fun <T> singlyLinkListOf(vararg elements: T): SinglyLinkedList<T> {
     return SinglyLinkedList<T>().apply {
         elements.forEach {
             addLast(it)
