@@ -88,6 +88,21 @@ class SinglyLinkedList<T> : ILinkedList<T>, Iterable<T> {
         size = 0
     }
 
+    override fun toString(): String {
+        val display = StringBuilder("[")
+        if (!isEmpty()) {
+            display.append(head!!.element)
+            var print = head!!.next
+            for (i in 1 until size) {
+                display.append(", ${print!!.element}")
+                print = print.next
+            }
+        }
+        display.append("]")
+        return display.toString()
+
+    }
+
     private fun checkIndex(index: Int): Boolean {
         return !(index < 0 || index > size - 1)
     }
