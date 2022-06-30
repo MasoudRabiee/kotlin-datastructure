@@ -1,6 +1,6 @@
 package dataStructureKT.linkedList
 
-class CircularlyLinkedList<T> : ILinkedList<T> {
+class CircularlyLinkedList<T> : ILinkedList<T>, Iterable<T> {
 
     data class Node<T>(var element: T, var next: Node<T>?)
 
@@ -22,6 +22,18 @@ class CircularlyLinkedList<T> : ILinkedList<T> {
             throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
         }
         return tail!!.element
+    }
+
+    fun get(index: Int): T {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        if (!checkIndex(index)) throw IndexOutOfBoundsException("Index $index out of bounds for length $size")
+        return moveTo(index).element!!
+    }
+
+    fun set(value: T, index: Int) {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        if (!checkIndex(index)) throw IndexOutOfBoundsException("Index $index out of bounds for length $size")
+        moveTo(index).element = value
     }
 
     override fun addFirst(element: T) {
@@ -84,5 +96,38 @@ class CircularlyLinkedList<T> : ILinkedList<T> {
         }
         display.append("]")
         return display.toString()
+    }
+
+    private fun checkIndex(index: Int): Boolean {
+        return index >= 0
+    }
+
+    private fun moveTo(index: Int): Node<T> {
+        var result = tail!!.next!!
+        for (i in 1..index % size) {
+            result = result.next!!
+        }
+        return result
+    }
+
+    override fun iterator() = object : Iterator<T> {
+        var initValue = tail?.next
+        var index = 0
+        override fun hasNext() = index != size
+        override fun next(): T {
+            val currentNode = initValue
+            initValue = initValue?.next
+            index++
+            return currentNode!!.element
+        }
+    }
+
+}
+
+fun <T> circularlyLinkedListOf(vararg elements: T): CircularlyLinkedList<T> {
+    return CircularlyLinkedList<T>().apply {
+        elements.forEach {
+            addLast(it)
+        }
     }
 }
