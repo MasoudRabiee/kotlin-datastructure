@@ -1,6 +1,6 @@
 package dataStructureKT.linkedList
 
-class SinglyLinkedList<T> : ILinkedList<T> {
+class SinglyLinkedList<T> : ILinkedList<T>, Iterable<T> {
 
     data class Node<T>(var element: T, var next: Node<T>?)
 
@@ -25,6 +25,18 @@ class SinglyLinkedList<T> : ILinkedList<T> {
             throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
         }
         return tail!!.element
+    }
+
+    fun get(index: Int): T {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        if (!checkIndex(index)) throw IndexOutOfBoundsException("Index $index out of bounds for length $size")
+        return moveTo(index).element
+    }
+
+    fun set(value: T, index: Int) {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        if (!checkIndex(index)) throw IndexOutOfBoundsException("Index $index out of bounds for length $size")
+        moveTo(index).element = value
     }
 
     override fun addFirst(element: T) {
@@ -76,4 +88,34 @@ class SinglyLinkedList<T> : ILinkedList<T> {
         size = 0
     }
 
+    private fun checkIndex(index: Int): Boolean {
+        return !(index < 0 || index > size - 1)
+    }
+
+    private fun moveTo(index: Int): Node<T> {
+        var result = head
+        for (i in 1..index) {
+            result = result!!.next
+        }
+        return result!!
+    }
+
+    override fun iterator() = object : Iterator<T> {
+        var initValue = head
+        override fun hasNext() = initValue != null
+        override fun next(): T {
+            val currentNode = initValue?.element
+            initValue = initValue?.next
+            return currentNode!!
+        }
+    }
+
+}
+
+fun <T> singleLinkListOf(vararg elements: T): SinglyLinkedList<T> {
+    return SinglyLinkedList<T>().apply {
+        elements.forEach {
+            addLast(it)
+        }
+    }
 }
