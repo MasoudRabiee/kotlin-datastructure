@@ -52,9 +52,9 @@ class CircularlyLinkedList<T> : ILinkedList<T>, Iterable<T> {
         tail = tail!!.next
     }
 
-    override fun removeFirst(): Boolean {
+    override fun removeFirst(): T {
         if (isEmpty()) {
-            return false
+            throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
         }
         val head = tail!!.next
         if (head == tail) {
@@ -63,10 +63,10 @@ class CircularlyLinkedList<T> : ILinkedList<T>, Iterable<T> {
             tail!!.next = head!!.next
         }
         size--
-        return true
+        return head!!.element
     }
 
-    override fun removeLast(): Boolean {
+    override fun removeLast(): T {
         for (i in 0 until size - 1) {
             rotate()
         }

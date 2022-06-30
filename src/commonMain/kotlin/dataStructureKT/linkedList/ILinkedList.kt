@@ -6,7 +6,7 @@ interface ILinkedList<T> {
     fun last(): T
     fun addFirst(element: T)
     fun addLast(element: T)
-    fun removeFirst(): Boolean
-    fun removeLast(): Boolean
+    fun removeFirst(): T
+    fun removeLast(): T
     fun clear()
 }

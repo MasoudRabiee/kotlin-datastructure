@@ -58,19 +58,21 @@ class SinglyLinkedList<T> : ILinkedList<T>, Iterable<T> {
         size++
     }
 
-    override fun removeFirst(): Boolean {
-        if (isEmpty()) return false
+    override fun removeFirst(): T {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        val removeNode = head!!.element
         head = head!!.next
         size--
         if (size == 0) {
             tail = null
         }
-        return true
+        return removeNode
     }
 
-    override fun removeLast(): Boolean {
-        if (isEmpty()) return false
+    override fun removeLast(): T {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
         var start = head
+        val removeNode = tail!!.element
         while ((start?.next)?.next != null)
             start = start.next
         size--
@@ -79,7 +81,7 @@ class SinglyLinkedList<T> : ILinkedList<T>, Iterable<T> {
             tail = start
             tail?.next = null
         }
-        return true
+        return removeNode
     }
 
     override fun clear() {

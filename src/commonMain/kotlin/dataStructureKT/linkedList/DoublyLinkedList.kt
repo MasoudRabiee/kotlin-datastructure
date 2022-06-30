@@ -45,16 +45,14 @@ class DoublyLinkedList<T> : ILinkedList<T>, Iterable<T> {
 
     override fun addLast(element: T) = addBetween(element, trailer.prev, trailer)
 
-    override fun removeFirst(): Boolean {
-        if (isEmpty()) return false
-        remove(header.next)
-        return true
+    override fun removeFirst(): T {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        return remove(header.next!!)
     }
 
-    override fun removeLast(): Boolean {
-        if (isEmpty()) return false
-        remove(trailer.prev)
-        return true
+    override fun removeLast(): T {
+        if (isEmpty()) throw NoSuchElementException("SinglyLinkedList is Empty. ( size = 0 )")
+        return remove(trailer.prev!!)
     }
 
     override fun clear() {
@@ -83,12 +81,13 @@ class DoublyLinkedList<T> : ILinkedList<T>, Iterable<T> {
         size++
     }
 
-    private fun remove(node: Node<T?>?) {
-        val predecessor = node?.prev
-        val successor = node?.next
+    private fun remove(node: Node<T?>): T {
+        val predecessor = node.prev
+        val successor = node.next
         predecessor?.next = successor
         successor?.prev = predecessor
         size--
+        return node.element!!
     }
 
     private fun checkIndex(index: Int): Boolean {
