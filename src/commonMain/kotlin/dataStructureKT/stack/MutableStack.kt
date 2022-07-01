@@ -17,7 +17,9 @@ class MutableStack<T>(vararg items: T) : IStack<T> {
         } else return elements.last()
     }
 
-    override fun push(item: T) = elements.add(item)
+    override fun push(item: T) {
+        elements.add(item)
+    }
 
     fun size(): Int = elements.size
 
